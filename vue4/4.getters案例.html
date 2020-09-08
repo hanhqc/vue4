@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="d1">
+    <first></first>
+    <hr>
+    <second></second>
+
+</div>
+<script src="js/vue.min.js"></script>
+<script src="js/vuex.3.0.1.js"></script>
+<script>
+
+    let first = {
+        template:`
+            <div>
+                组件1
+                <br>
+                <input type="number" v-model="cnt">
+                <button @click="pushData">点我</button>
+            </div>
+        `,
+        data:function(){
+            return {
+                cnt:0,
+            }
+        },
+        methods:{
+            pushData(){
+                this.$store.commit('add',this.cnt)
+            }
+        }
+    }
+
+    let second = {
+        template:`
+            <div>
+                组件2
+                <br>
+                <span>状态机中nums总和:{{$store.getters.result}}</span>
+            </div>
+        `,
+    }
+
+    let myStore = new Vuex.Store({
+        state:{
+            nums:[]
+        },
+        mutations:{
+            add(state,num){
+                state.nums.push(num)
+            }
+        },
+        getters:{
+            result(state){
+                let res = 0;
+                for(let n of state.nums){
+                    res += Number(n)
+                }
+                return res
+            }
+        }
+    })
+
+    new Vue({
+        el: '#d1',
+        data: {},
+        store:myStore,
+        components:{
+            first:first,
+            second:second
+        }
+    })
+
+</script>
+
+</body>
+</html>

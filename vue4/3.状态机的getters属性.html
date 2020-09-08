@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="d1">
+    <first></first>
+    <hr>
+    <second></second>
+
+</div>
+<script src="js/vue.min.js"></script>
+<script src="js/vuex.3.0.1.js"></script>
+<script>
+    let first = {
+        template:`
+            <div>
+                组件1
+                <br>
+                <button @click="add">点击</button>
+            </div>
+        `,
+        methods:{
+            add(){
+                this.$store.commit('add_count')
+            }
+        }
+    }
+
+    let second = {
+        template: `
+            <div>
+                组件2
+                <br>
+                <span>状态机中数据：{{$store.state.count}}</span>
+                <br>
+                <span>状态机中数据相反数：{{$store.getters.change}}</span>
+            </div>
+        `,
+    }
+
+
+
+    let myStore = new Vuex.Store({
+        state:{
+            count:1,
+        },
+        mutations:{
+          add_count(state){
+              state.count++;
+          }
+        },
+        getters:{
+            change(state){
+                return 0 - state.count;
+            }
+        }
+    })
+
+    new Vue({
+        el: '#d1',
+        data: {},
+        store:myStore,
+        components:{
+            first:first,
+            second:second
+        }
+
+    })
+
+</script>
+
+</body>
+</html>
